@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 
 # Registros de Winston
 *.log
+
+# Variables de entorno
+.env

@@ -69,9 +69,16 @@ module.exports.login = (req, res) => {
       });
     })
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, "super-secreto-dev", {
-        expiresIn: "7d"
-      });
+      const token = jwt.sign(
+        { _id: user._id },
+        process.env.NODE_ENV === "production"
+          ? process.env.JWT_SECRET
+          : "super-secreto-dev",
+        { expiresIn: "7d" },
+        {
+          expiresIn: "7d"
+        }
+      );
 
       res.send({ token });
     })
