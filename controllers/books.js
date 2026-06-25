@@ -21,28 +21,31 @@ module.exports.saveBook = (req, res) => {
   })
     .then((book) => res.status(201).send(book))
     .catch((err) =>
-      res
-        .status(400)
-        .send({
-          message: "Datos inválidos al crear el libro",
-          error: err.message
-        })
+      res.status(400).send({
+        message: "Datos inválidos al crear el libro",
+        error: err.message
+      })
     );
 };
 
-module.exports.deleteBook = (req, res) => {
-  Book.findOneAndDelete({ _id: req.params.id, owner: req.user._id })
+module.exports.deleteBook = (req, res, next) => {
+  Book.findById(req.params.id)
     .then((book) => {
       if (!book) {
-        return res
-          .status(404)
-          .send({
-            message: "Libro no encontrado o no tienes permisos para eliminarlo"
-          });
+        const err = new Error("Libro no encontrado");
+        err.statusCode = 404;
+        return next(err);
       }
-      res.send({ message: "Libro eliminado con éxito", book });
+
+      if (book.owner.toString() !== req.user._id) {
+        const err = new Error("No tienes permisos para eliminar este libro");
+        err.statusCode = 403;
+        return next(err);
+      }
+
+      return book
+        .deleteOne()
+        .then(() => res.send({ message: "Libro eliminado" }));
     })
-    .catch((err) =>
-      res.status(500).send({ message: "Error al intentar eliminar el libro" })
-    );
+    .catch(next);
 };
