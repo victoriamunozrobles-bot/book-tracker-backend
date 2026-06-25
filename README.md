@@ -4,5 +4,7 @@
 
 El backend de este proyecto ha sido desplegado exitosamente y es accesible públicamente.
 
-- **URL Base de la API (HTTPS):** `https://api.tu-dominio.com`
-- **Dirección IP del servidor:** `(Tu IP pública irá aquí)`
+La API de este proyecto se encuentra desplegada y asegurada con HTTPS:
+
+- **URL Base:** `https://book-tracker.mooo.com`
+- **Dirección IP:** `34.171.206.154`
