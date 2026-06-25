@@ -21,6 +21,10 @@ app.use("/", mainRouter);
 
 app.use(errorLogger);
 
+app.use(errors());
+
+app.use(errorHandler);
+
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor backend arrancando en el puerto ${PORT}`);
+  console.log(`Servidor backend arrancando en el puerto ${PORT}`);
 });
