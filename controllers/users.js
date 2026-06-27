@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { JWT_SECRET } = require("../utils/config");
 const User = require("../models/user");
 
 module.exports.getCurrentUser = (req, res, next) => {
@@ -8,7 +9,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         return res.status(404).send({ message: "Usuario no encontrado" });
       }
-      res.send({ name: user.name, email: user.email });
+      return res.send({ name: user.name, email: user.email });
     })
     .catch(next);
 };
@@ -42,7 +43,7 @@ module.exports.login = (req, res, next) => {
       .send({ message: "Se requiere correo electrónico y contraseña" });
   }
 
-  User.findOne({ email })
+  return User.findOne({ email })
     .select("+password")
     .then((user) => {
       if (!user) {
@@ -57,18 +58,11 @@ module.exports.login = (req, res, next) => {
       });
     })
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        process.env.NODE_ENV === "production"
-          ? process.env.JWT_SECRET
-          : "super-secreto-dev",
-        { expiresIn: "7d" },
-        {
-          expiresIn: "7d"
-        }
-      );
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d"
+      });
 
-      res.send({ token });
+      return res.send({ token });
     })
     .catch(next);
 };

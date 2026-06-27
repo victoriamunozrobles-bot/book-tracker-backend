@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../utils/config");
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
@@ -13,12 +14,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(
-      token,
-      process.env.NODE_ENV === "production"
-        ? process.env.JWT_SECRET
-        : "super-secreto-dev"
-    );
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     return res
       .status(401)
@@ -27,5 +23,5 @@ module.exports = (req, res, next) => {
 
   req.user = payload;
 
-  next();
+  return next();
 };
