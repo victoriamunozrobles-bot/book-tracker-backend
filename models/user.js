@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "El correo electrónico es obligatorio"],
     unique: true,
     validate: {
-      validator: function (v) {
+      validator (v) {
         return /^\S+@\S+\.\S+$/.test(v);
       },
       message: "Debes introducir un correo electrónico válido",
