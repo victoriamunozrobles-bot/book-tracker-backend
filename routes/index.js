@@ -1,18 +1,20 @@
-const mongoose = require("mongoose");
-const app = require("./app");
-const { MONGO_URI } = require("./utils/config");
+const router = require("express").Router();
+const auth = require("../middlewares/auth");
+const userRouter = require("./users");
+const bookRouter = require("./books");
 
-const { PORT = 3000 } = process.env;
+const { createUser, login } = require("../controllers/users");
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log("Conexión a MongoDB exitosa");
+router.post("/signup", validacionSignup, createUser);
+router.post("/signin", validacionSignin, login);
 
-    app.listen(PORT, () => {
-      console.log(`Servidor de Book Tracker corriendo en el puerto ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("Error conectando a la base de datos:", err);
-  });
+router.use(auth);
+
+router.use("/users", userRouter);
+router.use("/books", bookRouter);
+
+router.use((req, res) => {
+  res.status(404).send({ message: "Ruta no encontrada" });
+});
+
+module.exports = router;
