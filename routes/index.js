@@ -1,41 +1,18 @@
-const router = require("express").Router();
-const { celebrate, Joi } = require("celebrate");
-const { createUser, login } = require("../controllers/users");
-const authMiddleware = require("../middlewares/auth");
+const mongoose = require("mongoose");
+const app = require("./app");
+const { MONGO_URI } = require("./utils/config");
 
-const userRoutes = require("./users");
-const bookRoutes = require("./books");
+const { PORT = 3000 } = process.env;
 
-router.post(
-  "/signup",
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30).required(),
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(8)
-    })
-  }),
-  createUser
-);
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log("Conexión a MongoDB exitosa");
 
-router.post(
-  "/signin",
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required()
-    })
-  }),
-  login
-);
-
-router.use(authMiddleware);
-
-router.use("/users", userRoutes);
-router.use("/books", bookRoutes);
-
-router.use((req, res) => {
-  res.status(404).send({ message: "Recurso no encontrado" });
-});
-
-module.exports = router;
+    app.listen(PORT, () => {
+      console.log(`Servidor de Book Tracker corriendo en el puerto ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Error conectando a la base de datos:", err);
+  });
