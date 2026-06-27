@@ -11,7 +11,7 @@ module.exports = (err, req, res, next) => {
     return res.status(400).send({ message: "Datos inválidos proporcionados" });
   }
 
-  res.status(statusCode).send({
+  return res.status(statusCode).send({
     message:
       statusCode === 500 ? "Se ha producido un error en el servidor" : message
   });
