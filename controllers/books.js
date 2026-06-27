@@ -42,3 +42,13 @@ module.exports.deleteBook = (req, res, next) => {
     })
     .catch(next);
 };
+
+module.exports.createBook = (req, res, next) => {
+  const owner = req.user._id;
+
+  Book.create({ ...req.body, owner })
+    .then((book) => {
+      res.status(201).send(book);
+    })
+    .catch(next);
+};
