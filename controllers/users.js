@@ -37,12 +37,6 @@ module.exports.createUser = (req, res, next) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res
-      .status(400)
-      .send({ message: "Se requiere correo electrónico y contraseña" });
-  }
-
   return User.findOne({ email })
     .select("+password")
     .then((user) => {
