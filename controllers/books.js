@@ -20,12 +20,7 @@ module.exports.saveBook = (req, res) => {
     owner: req.user._id
   })
     .then((book) => res.status(201).send(book))
-    .catch((err) =>
-      res.status(400).send({
-        message: "Datos inválidos al crear el libro",
-        error: err.message
-      })
-    );
+    .catch(next);
 };
 
 module.exports.deleteBook = (req, res, next) => {
