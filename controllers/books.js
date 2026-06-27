@@ -1,14 +1,12 @@
 const Book = require("../models/book");
 
-module.exports.getSavedBooks = (req, res) => {
+module.exports.getSavedBooks = (req, res, next) => {
   Book.find({ owner: req.user._id })
     .then((books) => res.send(books))
-    .catch((err) =>
-      res.status(500).send({ message: "Error al obtener los libros" })
-    );
+    .catch(next);
 };
 
-module.exports.saveBook = (req, res) => {
+module.exports.saveBook = (req, res, next) => {
   const { googleBookId, title, author, coverImage, notes } = req.body;
 
   Book.create({

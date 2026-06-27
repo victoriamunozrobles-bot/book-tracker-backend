@@ -2,7 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -10,14 +10,10 @@ module.exports.getCurrentUser = (req, res) => {
       }
       res.send({ name: user.name, email: user.email });
     })
-    .catch((err) =>
-      res
-        .status(500)
-        .send({ message: "Error interno del servidor", error: err.message })
-    );
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
 
   bcrypt
@@ -34,20 +30,10 @@ module.exports.createUser = (req, res) => {
       delete userResponse.password;
       res.status(201).send(userResponse);
     })
-    .catch((err) => {
-      if (err.name === "MongoServerError" && err.code === 11000) {
-        res
-          .status(409)
-          .send({ message: "El correo electrónico ya está registrado" });
-      } else {
-        res
-          .status(400)
-          .send({ message: "Datos inválidos", error: err.message });
-      }
-    });
+    .catch(next);
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -84,7 +70,5 @@ module.exports.login = (req, res) => {
 
       res.send({ token });
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(next);
 };
