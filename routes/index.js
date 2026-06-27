@@ -4,9 +4,13 @@ const userRouter = require("./users");
 const bookRouter = require("./books");
 
 const { createUser, login } = require("../controllers/users");
+const {
+  validateSignup,
+  validateSignin
+} = require("../middlewares/validations");
 
-router.post("/signup", validacionSignup, createUser);
-router.post("/signin", validacionSignin, login);
+router.post("/signup", validateSignup, createUser);
+router.post("/signin", validateSignin, login);
 
 router.use(auth);
 
