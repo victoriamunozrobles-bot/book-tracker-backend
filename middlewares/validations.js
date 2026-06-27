@@ -15,4 +15,10 @@ const validateSignin = celebrate({
   })
 });
 
-module.exports = { validateSignup, validateSignin };
+const validateBookBody = celebrate({
+  body: Joi.object().keys({
+    title: Joi.string().required()
+  })
+});
+
+module.exports = { validateSignup, validateSignin, validateBookBody };
