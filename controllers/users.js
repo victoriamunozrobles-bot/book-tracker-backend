@@ -11,7 +11,11 @@ module.exports.getCurrentUser = (req, res, next) => {
         error.statusCode = 404;
         return Promise.reject(error);
       }
-      return res.send({ name: user.name, email: user.email });
+      return res.send({
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar
+      });
     })
     .catch(next);
 };
