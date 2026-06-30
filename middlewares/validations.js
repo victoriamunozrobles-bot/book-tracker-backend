@@ -17,7 +17,13 @@ const validateSignin = celebrate({
 
 const validateBookBody = celebrate({
   body: Joi.object().keys({
-    title: Joi.string().required()
+    googleBookId: Joi.string().required(),
+    title: Joi.string().required(),
+    author: Joi.string().allow(""),
+    coverImage: Joi.string().allow(""),
+    startDate: Joi.string().required(),
+    endDate: Joi.string().allow("", null),
+    status: Joi.string().valid("Leyendo", "Terminado").required()
   })
 });
 
