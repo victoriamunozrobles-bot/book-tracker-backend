@@ -1,0 +1,45 @@
+{
+  "name": "book-tracker-backend",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "backend"
+  ],
+  "homepage": "https://github.com/victoriamunozrobles-bot/book-tracker-backend#readme",
+  "bugs": {
+    "url": "https://github.com/victoriamunozrobles-bot/book-tracker-backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victoriamunozrobles-bot/book-tracker-backend.git"
+  },
+  "license": "ISC",
+  "author": "Victoria Muñoz Robles <victoriamunozrobles@gmail.com>",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "celebrate": "^15.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "express-winston": "^4.2.0",
+    "helmet": "^8.2.0",
+    "joi": "^18.2.3",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.2",
+    "winston": "^3.19.0"
+  }
+}
