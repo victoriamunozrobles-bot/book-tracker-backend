@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
     required: [true, "El nombre es obligatorio"],
     minlength: [2, "El nombre debe tener al menos 2 caracteres"],
     maxlength: [30, "El nombre no puede exceder los 30 caracteres"]
+  },
+  avatar: {
+    type: String,
+    required: false, // O true, según tus reglas
+    default: "https://cdn-icons-png.flaticon.com/512/149/149071.png"
   }
 });
 

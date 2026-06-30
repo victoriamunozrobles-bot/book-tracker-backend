@@ -7,7 +7,9 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "Usuario no encontrado" });
+        const error = new Error("Usuario no encontrado");
+        error.statusCode = 404;
+        return Promise.reject(error);
       }
       return res.send({ name: user.name, email: user.email });
     })
@@ -29,7 +31,7 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => {
       const userResponse = user.toObject();
       delete userResponse.password;
-      res.status(201).send(userResponse);
+      return res.status(201).send(userResponse);
     })
     .catch(next);
 };
@@ -41,12 +43,16 @@ module.exports.login = (req, res, next) => {
     .select("+password")
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error("Credenciales incorrectas"));
+        const error = new Error("Credenciales incorrectas");
+        error.statusCode = 401;
+        return Promise.reject(error);
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return Promise.reject(new Error("Credenciales incorrectas"));
+          const error = new Error("Credenciales incorrectas");
+          error.statusCode = 401;
+          return Promise.reject(error);
         }
         return user;
       });
@@ -57,6 +63,25 @@ module.exports.login = (req, res, next) => {
       });
 
       return res.send({ token });
+    })
+    .catch(next);
+};
+
+module.exports.updateUser = (req, res, next) => {
+  const { name, avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Usuario no encontrado");
+        error.statusCode = 404;
+        return Promise.reject(error);
+      }
+      return res.send(user);
     })
     .catch(next);
 };
